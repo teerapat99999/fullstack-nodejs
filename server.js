@@ -52,7 +52,7 @@ app.post('/reg', (req, res) => {
             res.status(500).json({ error: 'Failed to insert user' });
         } else {
             res.status(200).json({ message: 'User inserted successfully' });
-            res.window.location.href = '/login.html';
+
         }
     });
 });

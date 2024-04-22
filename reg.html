@@ -70,6 +70,7 @@
         .then(data => {
             alert(data.message);
             document.getElementById("userForm").reset();
+            window.location = './login.html'
         })
         .catch(error => {
             console.error('Error:', error);
