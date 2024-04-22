@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add User</title>
+</head>
+<body>
+    <h1>Add User</h1>
+    <form id="userForm">
+        <label for="fname_user">First Name:</label><br>
+        <input type="text" id="fname_user" name="fname_user"><br>
+        <label for="lname_user">Last Name:</label><br>
+        <input type="text" id="lname_user" name="lname_user"><br>
+        <label for="username_user">Username:</label><br>
+        <input type="text" id="username_user" name="username_user"><br>
+        <label for="password_user">Password:</label><br>
+        <input type="password" id="password_user" name="password_user"><br>
+        <label for="img">Image URL:</label><br>
+        <input type="file" id="img" name="img"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        document.getElementById("userForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const formData = {
+                fname_user: document.getElementById("fname_user").value,
+                lname_user: document.getElementById("lname_user").value,
+                username_user: document.getElementById("username_user").value,
+                password_user: document.getElementById("password_user").value,
+                img: document.getElementById("img").value
+            };
+
+            fetch('http://localhost:5000/reg', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                document.getElementById("userForm").reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to add user');
+            });
+        });
+    </script>
+</body>
+</html>
