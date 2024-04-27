@@ -13,35 +13,36 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/users', (req, res) => {
+app.get('/type', (req,res) => {
+    connection.query("SELECT * FROM type_post", (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({error : 'ไม่มีประเภท'})
+        }else{
+            res.json(results);
+        }
+    })
+})
+
+
+app.get('/post', (req, res) => {
     connection.query("SELECT * FROM users", (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: 'Failed to retrieve users' });
+            res.status(500).json({ error: 'ไม่มีผู้ใช้' });
         } else {
             res.json(results);
         }
     });
 });
 
-app.get('/users/:id', (req, res) => {
-    const id = req.params.id;
-    connection.query("SELECT * FROM users WHERE id = ?", [id], (err, results) => {
-        if (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to retrieve user' });
-        } else {
-            res.json(results);
-        }
-    });
-});
 
 app.post('/reg', (req, res) => {
     const { fname_user, lname_user, username_user, password_user, img } = req.body;
     const type_user = 1;
        
     if (!fname_user || !lname_user || !username_user || !password_user || !img) {
-        return res.status(400).json({ error: 'Username and password are required' });
+        return res.status(400).json({ error: 'โปรดกรอกขอข้อมูลให้ครบ' });
     }
     
     connection.query("INSERT INTO users (fname_user, lname_user, username_user, password_user, type_user, img) VALUES (?, ?, ?, ?, ?, ?)", 
@@ -49,19 +50,15 @@ app.post('/reg', (req, res) => {
     (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: 'Failed to insert user' });
+            res.status(500).json({ error: 'ไม่มีสมาชิก รหัสผ่านผิดหรือไม่ได้สมัครสมาชิก' });
         } else {
-            res.status(200).json({ message: 'User inserted successfully' });
-
+            res.status(200).json({ message: 'success' });
         }
     });
 });
 
 app.post('/login', (req, res) => {
     const { username_user, password_user } = req.body;
-
-    
-
     connection.query("SELECT * FROM users WHERE username_user = ? AND password_user = ?", [username_user, password_user], (err, results) => {
         if (err) {
             console.error(err);
