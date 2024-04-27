@@ -10,22 +10,29 @@
 <body>
     <div class="container">
         <div style="height:100px;"></div>
+        <div>
+            <a href="./index.html" class="btn btn-success">กลับหน้าแรก</a>
+        </div>
         <div class="row justify-content-center">
             <div class="col-sm-12 col-md-8 col-lg-6">
                 <div class="card">
                     <div class="card-body">
+                        <form action="" method="post" id="formapp">
                         <div class="mb-2">
-                            <input type="text" class="form-control" placeholder="หัวข้อ">
+                            <input type="text" class="form-control" id="post" placeholder="หัวข้อ">
                         </div>
                         <div class="mb-2">
-                            <input type="text" class="form-control" placeholder="รายละเอียด"> 
+                            <input type="text" class="form-control" id="details" placeholder="รายละเอียด"> 
                         </div>
                         <div class="mb-2">
-                            <select class="form-select">
+                            <select class="form-select" id="type_select">
                                 <option selected>ประเภทหัวข้อ</option>
-                                <option value="1" id="type"></option>
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <button class="btn btn-success" id="submit">โพสต์</button>
+                        </div>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -43,17 +50,41 @@
             return response.json();
         })
         .then(data => {
-            const dataContainer = document.getElementById('type');
-            dataContainer.textContent = ''; 
-
+            const selectElement = document.getElementById('type_select');
             data.forEach(item => {
-                const p = document.createElement('p'); 
-                p.textContent = `${item.name_post}`; 
-                dataContainer.appendChild(p); 
+                const option = document.createElement('option'); 
+                option.textContent = item.name_post; 
+                option.value = item.id; 
+                selectElement.appendChild(option); 
             });
         })
         .catch(error => {
             console.error('error', error);
         });
 });
+
+document.getElementById("formapp").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const formData = {
+            post: document.getElementById("post").value,
+            details : document.getElementById("details").value,
+            typ
+        };
+
+        fetch('http://localhost:5000/post', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to add user');
+        });
+    });
     </script>

@@ -37,6 +37,16 @@ app.get('/post', (req, res) => {
 });
 
 
+app.post('/add', (req,res) => {
+    const { post  , details} = req.body;
+
+    connection.query("INSERT INTO post (post , details) value (?,?)"),
+    [post , details],
+    (err , result) => {
+        res.status(200).json({ message : 'success'});
+    } 
+})
+
 app.post('/reg', (req, res) => {
     const { fname_user, lname_user, username_user, password_user, img } = req.body;
     const type_user = 1;
@@ -50,7 +60,7 @@ app.post('/reg', (req, res) => {
     (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: 'ไม่มีสมาชิก รหัสผ่านผิดหรือไม่ได้สมัครสมาชิก' });
+            res.status(500).json({ error: 'เกิดข้อผิดพลาด' });
         } else {
             res.status(200).json({ message: 'success' });
         }
@@ -66,9 +76,10 @@ app.post('/login', (req, res) => {
         }
         if (results.length === 0) {
             return res.status(401).json({ error: 'Invalid username or password' });
-        }else
+        }else{
+        const id_user = results.insertId;
         res.status(200).json({ message: 'Login successful', user: results[0] });
-    });
+}});
 });
 
 
