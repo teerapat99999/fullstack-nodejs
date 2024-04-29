@@ -55,6 +55,9 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const userId = sessionStorage.getItem('userid');
+            console.log(userId)
+    
             fetch('http://localhost:5000/post')
                 .then(response => {
                     if (!response.ok) {
@@ -64,18 +67,18 @@
                 })
                 .then(data => {
                     const dataContainer = document.getElementById('data');
-                    dataContainer.textContent = ''; 
-
+                    dataContainer.textContent = '';
+    
                     data.forEach(item => {
                         const card = document.createElement('div');
                         card.classList.add('card', 'mb-3');
                         const cardBody = document.createElement('div');
                         cardBody.classList.add('card-body');
-                        const p = document.createElement('p'); 
-                        p.textContent = `ชื่อประเภท ${item.name_post}`; 
+                        const p = document.createElement('p');
+                        p.textContent = `ชื่อประเภท ${item.name_post}`;
                         cardBody.appendChild(p);
                         card.appendChild(cardBody);
-                        dataContainer.appendChild(card); 
+                        dataContainer.appendChild(card);
                     });
                 })
                 .catch(error => {
