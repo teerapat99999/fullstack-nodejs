@@ -17,7 +17,7 @@
             <div class="col-sm-12 col-md-8 col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <form action="" method="post" id="formapp">
+                        <form action="/add" method="post" id="formapp">
                         <div class="mb-2">
                             <input type="text" class="form-control" id="post" placeholder="หัวข้อ">
                         </div>
@@ -26,11 +26,11 @@
                         </div>
                         <div class="mb-2">
                             <select class="form-select" id="type_select">
-                                <option selected>ประเภทหัวข้อ</option>
+                                <option selected id="type">ประเภทหัวข้อ</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <button class="btn btn-success" id="submit">โพสต์</button>
+                            <input type="submit" value="โพสน์" class="btn btn-success">
                         </div>
                     </form>
                     </div>
@@ -41,47 +41,56 @@
 </body>
 </html>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const userId = sessionStorage.getItem('userid');
-            console.log(userId)
+    const userId = sessionStorage.getItem('userid');
+    console.log(userId)
 
+    document.addEventListener('DOMContentLoaded', function() {
         if(userId){
             alert("สามารถโพสน์ได้");
-        }else{
+        } else {
             alert('ต้องเข้าสู่ระบบหรือสมัครสมาชิกก่อน')
             window.location = './login.html';
         }
 
-    fetch('http://localhost:5000/type')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const selectElement = document.getElementById('type_select');
-            data.forEach(item => {
-                const option = document.createElement('option'); 
-                option.textContent = item.name_post; 
-                option.value = item.id; 
-                selectElement.appendChild(option); 
+        fetch('http://localhost:5000/type')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const selectElement = document.getElementById('type_select');
+                data.forEach(item => {
+                    const option = document.createElement('option'); 
+                    option.textContent = item.name_post; 
+                    option.value = item.id; 
+                    selectElement.appendChild(option); 
+                });
+            })
+            .catch(error => {
+                console.error('error', error);
             });
-        })
-        .catch(error => {
-            console.error('error', error);
-        });
-});
+    });
 
-document.getElementById("formapp").addEventListener("submit", function(event) {
+    document.getElementById("formapp").addEventListener("submit", function(event) {
         event.preventDefault();
+
+
+        const selectedType = document.getElementById("type_select").value;
+        if(selectedType === "ประเภทหัวข้อ") {
+            alert("โปรดเลือกประเภทหัวข้อ");
+            return;
+        }
+
         const formData = {
             post: document.getElementById("post").value,
             details : document.getElementById("details").value,
-            typ
+            type : selectedType, 
+            id_user :  userId
         };
 
-        fetch('http://localhost:5000/post', {
+        fetch('http://localhost:5000/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -94,7 +103,7 @@ document.getElementById("formapp").addEventListener("submit", function(event) {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to add user');
+            alert('เกิดข้อผิดพลาด');
         });
     });
-    </script>
+</script>

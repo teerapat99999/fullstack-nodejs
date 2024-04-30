@@ -68,9 +68,10 @@
                 return response.json();
             })
             .then(data => {
-                console.log(data.message); 
+                console.log(data.message);
+                alert('ออกจากระบบแล้ว')
                 sessionStorage.removeItem('userid');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             })
             .catch(error => {
                 console.error('error', error);

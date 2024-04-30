@@ -21,16 +21,6 @@ app.use(session({
 }));
 
 
-app.get('/type', (req, res) => {
-    connection.query("SELECT * FROM type_post", (err, results) => {
-        if (err) {
-            console.error(err);
-            res.status(500).json({ error: 'ไม่มีประเภท' })
-        } else {
-            res.json(results);
-        }
-    })
-})
 
 
 app.get('/post', (req, res) => {
@@ -44,6 +34,35 @@ app.get('/post', (req, res) => {
     });
 });
 
+
+app.post('/add', (req, res) => {
+    const { post, details, type, id_user } = req.body;
+    connection.query(
+        "INSERT INTO post (post, details, type, id_user) VALUES (?, ?, ?, ?)",
+        [post, details, type, id_user],
+        (err, result) => {
+            if(err) {
+                console.error(err);
+                return res.status(500).json({ error: 'เกิดข้อผิดพลาดในการเพิ่มโพสต์' });
+            }
+            console.log(result);
+            res.status(200).json({ message: 'โพสต์สำเร็จ' });
+        }
+    );
+});
+
+app.get('/type', (req, res) => {
+    connection.query("SELECT * FROM type_post", (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'ไม่มีประเภท' });
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
 app.get('/user', (req, res) => {
     connection.query("SELECT * FROM users", (err, results) => {
         if (err) {
@@ -56,14 +75,6 @@ app.get('/user', (req, res) => {
 });
 
 
-app.post('/add', (req, res) => {
-    const { post, details } = req.body;
-    connection.query("INSERT INTO post (post , details) value (?,?)"),
-        [post, details],
-        (err, result) => {
-            res.status(200).json({ message: 'success' });
-        }
-})
 
 app.post('/reg', (req, res) => {
     const { fname_user, lname_user, username_user, password_user, img } = req.body;
