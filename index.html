@@ -33,6 +33,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="add.html">สร้างโพสน์</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-danger" id="logoutBtn" onclick="logout()">ออกจากระบบ</a>
+                        </li>                        
                         <form class="d-flex mt-3" role="search">
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-success" type="submit">Search</button>
@@ -54,15 +57,32 @@
         </div>
     </div>
     <script>
+        function logout() {
+            fetch('http://localhost:5000/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.message); 
+                sessionStorage.removeItem('userid');
+                window.location.href = 'login.html';
+            })
+            .catch(error => {
+                console.error('error', error);
+            });
+        }
+    
         document.addEventListener('DOMContentLoaded', function() {
             const userId = sessionStorage.getItem('userid');
             console.log(userId)
     
             fetch('http://localhost:5000/post')
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
                     return response.json();
                 })
                 .then(data => {
@@ -86,5 +106,6 @@
                 });
         });
     </script>
+    
 </body>
 </html>

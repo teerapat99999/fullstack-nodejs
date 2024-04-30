@@ -42,6 +42,16 @@
 </html>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const userId = sessionStorage.getItem('userid');
+            console.log(userId)
+
+        if(userId){
+            alert("สามารถโพสน์ได้");
+        }else{
+            alert('ต้องเข้าสู่ระบบหรือสมัครสมาชิกก่อน')
+            window.location = './login.html';
+        }
+
     fetch('http://localhost:5000/type')
         .then(response => {
             if (!response.ok) {

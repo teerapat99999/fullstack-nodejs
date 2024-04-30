@@ -58,7 +58,6 @@ app.get('/user', (req, res) => {
 
 app.post('/add', (req, res) => {
     const { post, details } = req.body;
-
     connection.query("INSERT INTO post (post , details) value (?,?)"),
         [post, details],
         (err, result) => {
@@ -101,6 +100,19 @@ app.post('/login', (req, res) => {
         }
     });
 });
+
+app.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to logout' });
+        } else {
+            res.status(200).json({ message: 'Logout successful' });
+        }
+    });
+});
+
+
 
 
 const PORT = 5000;
