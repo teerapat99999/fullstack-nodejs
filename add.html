@@ -26,7 +26,7 @@
                         </div>
                         <div class="mb-2">
                             <select class="form-select" id="type_select">
-                                <option selected id="type">ประเภทหัวข้อ</option>
+                                <option selected >ประเภทหัวข้อ</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -63,9 +63,10 @@
                 const selectElement = document.getElementById('type_select');
                 data.forEach(item => {
                     const option = document.createElement('option'); 
-                    option.textContent = item.name_post; 
-                    option.value = item.id; 
-                    selectElement.appendChild(option); 
+                    option.textContent = item.name_post 
+                    option.value = item.id_typepost; 
+                    selectElement.appendChild(option);
+                    console.log(selectElement)
                 });
             })
             .catch(error => {
@@ -74,36 +75,40 @@
     });
 
     document.getElementById("formapp").addEventListener("submit", function(event) {
-        event.preventDefault();
+    event.preventDefault();
 
+   
+    const selectedType = document.getElementById("type_select").value;
+    console.log(selectedType);
 
-        const selectedType = document.getElementById("type_select").value;
-        if(selectedType === "ประเภทหัวข้อ") {
-            alert("โปรดเลือกประเภทหัวข้อ");
-            return;
-        }
+    if(selectedType === "ประเภทหัวข้อ") {
+        alert("โปรดเลือกประเภทหัวข้อ");
+        return;
+    }
 
-        const formData = {
-            post: document.getElementById("post").value,
-            details : document.getElementById("details").value,
-            type : selectedType, 
-            id_user :  userId
-        };
+    const formData = {
+        post: document.getElementById("post").value,
+        details: document.getElementById("details").value,
+        type: selectedType,
+        id_user: userId
+    };
 
-        fetch('http://localhost:5000/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('เกิดข้อผิดพลาด');
-        });
+    fetch('http://localhost:5000/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('เกิดข้อผิดพลาด');
     });
+});
+
+
 </script>
