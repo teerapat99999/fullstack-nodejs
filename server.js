@@ -116,7 +116,7 @@ app.post('/login', (req, res) => {
             return res.status(500).json({ error: 'Failed to authenticate user' });
         }
         if (results.length === 0) {
-            return res.status(401).json({ error: 'Invalid username or password' });
+            return res.status(401).json({ error: 'รหัสผ่านหรือusernameผิด' });
         } else {
             req.session.userid = results[0].id_user;
             res.status(200).json({ message: 'Login successful', userId: results[0].id_user });

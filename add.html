@@ -28,7 +28,7 @@
                         </div>
                         <div class="mb-2">
                             <select class="form-select" id="type_select">
-                                <option selected >ประเภทหัวข้อ</option>
+                                
                             </select>
                         </div>
                         <div class="mb-3">
@@ -55,26 +55,21 @@
         }
 
         fetch('http://localhost:5000/type')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+        .then(response => response.json())
             .then(data => {
-                const selectElement = document.getElementById('type_select');
+                const datacontainer = document.getElementById('type_select');
+                datacontainer.innerHTML = '<option selected >ประเภทหัวข้อ</option>'; 
+
                 data.forEach(item => {
-                    const option = document.createElement('option'); 
-                    option.textContent = item.name_post 
-                    option.value = item.name_post; 
-                    selectElement.appendChild(option);
-                    console.log(selectElement)
+                    datacontainer.innerHTML += 
+                    ` <option value = "${item.name_post}" > ${item.name_post} </option>
+                    ` 
                 });
             })
             .catch(error => {
                 console.error('error', error);
             });
-    });
+        });
 
     document.getElementById("formapp").addEventListener("submit", function(event) {
     event.preventDefault();

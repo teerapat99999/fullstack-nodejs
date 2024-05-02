@@ -91,7 +91,9 @@
 
                 data.forEach(item => {
                     dataContainer.innerHTML += 
-                    ` หัวข้อ ${item.post}  รายละเอียด ${item.details}</p>`; 
+                    ` <p> หัวข้อ ${item.post} </p> 
+                      <p> รายละเอียด ${item.details}</p>
+                    ` 
                 });
             })
             .catch(error => {

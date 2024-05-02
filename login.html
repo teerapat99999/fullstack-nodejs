@@ -62,6 +62,7 @@
                 sessionStorage.setItem('userid', data.userId); 
                 window.location.href = './index.html';
             } else {
+                alert(data.error);
                 console.error('Login failed:', data.error);
             }
         })
