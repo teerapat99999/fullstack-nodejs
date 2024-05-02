@@ -62,6 +62,16 @@ app.get('/type', (req, res) => {
     });
 });
 
+app.get('/get-post', (req,res) => {
+    connection.query("SELECT * FROM post", (err,results) => {
+        if(err){
+            console.log(err);
+            res.status(500).json({error : 'ไม่มีข้อผิด'});
+        }else{
+            res.json(results);
+        }
+    })
+})
 
 app.get('/user', (req, res) => {
     connection.query("SELECT * FROM users", (err, results) => {
