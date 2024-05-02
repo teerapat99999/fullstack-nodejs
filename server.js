@@ -62,6 +62,8 @@ app.get('/type', (req, res) => {
     });
 });
 
+
+
 app.get('/get-post', (req,res) => {
     connection.query("SELECT * FROM post", (err,results) => {
         if(err){
