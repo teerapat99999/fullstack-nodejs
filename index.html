@@ -45,13 +45,17 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div class="container" onload="selectdata">
         <div style="height:130px;"></div>
         <div class="row justify-content-center">
             <div class="col-sm-12 col-md-8 col-lg-6">
                 <div class="card">
                     <div class="card-body" id="data" align="center">
                         <p id="get-post"></p>
+                        <form action="" method="post">
+                            <input type="text" id="comment" class="from-control">
+                            <input type="submit" value="ส่ง" id="submit">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -79,7 +83,7 @@
             });
         }
     
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function(selectdata) {
             const userId = sessionStorage.getItem('userid');
             console.log(userId);
             
@@ -91,9 +95,31 @@
 
                 data.forEach(item => {
                     dataContainer.innerHTML += 
-                    ` <p> หัวข้อ ${item.post} </p> 
+                    `
+                    <div class = 'mb-3'>
+                    <div class = 'card' >
+                        <div class = "card-body"> 
+                    <p> หัวข้อ ${item.post} </p> 
                       <p> รายละเอียด ${item.details}</p>
+                    </div>
+                    </div>
+                    </div>
                     ` 
+                });
+            })
+            .catch(error => {
+                console.error('error', error);
+            });
+
+            fetch('http://localhost:5000/get-post')
+            .then(response => response.json())
+            .then(data => {
+                const dataContainer = document.getElementById('get-post');
+                dataContainer.innerHTML = ''; 
+
+                data.forEach(item => {
+                    dataContainer.innerHTML += 
+                    ` ` 
                 });
             })
             .catch(error => {
