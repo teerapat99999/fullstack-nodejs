@@ -51,6 +51,22 @@ app.post('/add', (req, res) => {
     );
 });
 
+app.post('/comment', (req, res) => {
+    const { comment } = req.body;
+    connection.query(
+        "INSERT INTO com (com) VALUES (?)",
+        [comment],
+        (err, result) => {
+            if(err) {
+                console.error(err);
+                return res.status(500).json({ error: 'เกิดข้อผิดพลาดในการคอมเมนต์' });
+            }
+            console.log(result);
+            res.status(200).json({ message: 'คอมเมนต์สำเร็จ' });
+        }
+    );
+});
+
 app.get('/type', (req, res) => {
     connection.query("SELECT * FROM type_post", (err, results) => {
         if (err) {
