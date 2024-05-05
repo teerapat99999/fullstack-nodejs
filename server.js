@@ -52,12 +52,12 @@ app.post('/add', (req, res) => {
 });
 
 app.post('/comment', (req, res) => {
-    const { comment } = req.body;
+    const { comment, id_post } = req.body;
     connection.query(
-        "INSERT INTO com (com) VALUES (?)",
-        [comment],
-        (err, result) => {
-            if(err) {
+        "INSERT INTO com (com,id_post) VALUES (?,?)",
+        [comment,id_post ],
+         (err, result) => {
+            if (err) {
                 console.error(err);
                 return res.status(500).json({ error: 'เกิดข้อผิดพลาดในการคอมเมนต์' });
             }
@@ -80,16 +80,22 @@ app.get('/type', (req, res) => {
 
 
 
-app.get('/get-post', (req,res) => {
-    connection.query("SELECT * FROM post", (err,results) => {
-        if(err){
+app.get('/get-post', (req, res) => {
+    connection.query("SELECT post.*, GROUP_CONCAT(com.com SEPARATOR '|') AS com FROM post LEFT JOIN com ON post.id_post = com.id_post GROUP BY post.id_post", (err, results) => {
+        if (err) {
             console.log(err);
-            res.status(500).json({error : 'ไม่มีข้อผิด'});
-        }else{
+            res.status(500).json({ error: 'เกิดข้อผิดพลาด' });
+        } else {
+            results.forEach(post => {
+                post.com = post.com ? post.com.split('|') : [];
+            });
             res.json(results);
         }
     })
 })
+
+
+
 
 app.get('/user', (req, res) => {
     connection.query("SELECT * FROM users", (err, results) => {

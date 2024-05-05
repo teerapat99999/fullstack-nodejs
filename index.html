@@ -4,64 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">หน้าแรก</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login.html">เข้าสู่ระบบ</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="reg.html">สมัครสมาชิก</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="add.html">สร้างโพสน์</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-danger" id="logoutBtn" onclick="logout()">ออกจากระบบ</a>
-                        </li>                        
-                        <form class="d-flex mt-3" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-success" type="submit">Search</button>
-                        </form>
-                    </ul>
-                </div>
-            </div>
+          <a class="navbar-brand" href="#"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">หน้าแรก</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./login.html">เข้าสู่ระบบ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./reg.html">สมัครสมาชิก</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./add.html">สมัครสมาชิก</a>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
         </div>
-    </nav>
-    <div class="container" >
-        <div style="height:130px;"></div>
+      </nav>
+    <div style="height: 100px;"></div>
+    <div class="container-fluid mt-5">
         <div class="row justify-content-center">
             <div class="col-sm-12 col-md-8 col-lg-6">
                 <div class="card">
                     <div class="card-body" id="data" align="center">
-                        <p id="get-post"></p>
-                        <form id="commentForm">
-                            <div class="row" align = "center">
-                                <div class="col-10">
-                                    <input type="text" class="form-control" name="comment" id="comment" placeholder="แสดงความคิดเห็น">
-                                </div>
-                                <div class="col-2">
-                                    <button type="submit" class="btn btn-success">ส่ง</button>
-                                </div>
-                            </div>
-                        </form>
+                        <div id="postContainer"></div>
+                        <div id="selectcomment"></div>
                     </div>
                 </div>
             </div>
@@ -80,7 +64,7 @@
             })
             .then(data => {
                 console.log(data.message);
-                alert('ออกจากระบบแล้ว')
+                alert('ออกจากระบบแล้ว');
                 sessionStorage.removeItem('userid');
                 window.location.href = 'index.html';
             })
@@ -88,29 +72,66 @@
                 console.error('error', error);
             });
         }
-    
+
         document.addEventListener('DOMContentLoaded', function() {
-            const userId = sessionStorage.getItem('userid');
-            console.log(userId);
-            
             fetch('http://localhost:5000/get-post')
             .then(response => response.json())
             .then(data => {
-                const dataContainer = document.getElementById('get-post');
-                dataContainer.innerHTML = ''; 
+                const postContainer = document.getElementById('postContainer');
+                postContainer.innerHTML = '';
 
                 data.forEach(item => {
-                    dataContainer.innerHTML += 
-                    `
-                    <div class = 'mb-4'>
+    postContainer.innerHTML += `
+        <div class="mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <p>หัวข้อ: ${item.post}</p>
+                    <p>รายละเอียด: ${item.details}</p>
+                    <h5>แสดงความคิดเห็นทั้งหมด</h5>
                     <div class="card">
-                            <div class="card-body">
-                                <p>หัวข้อ ${item.post}</p>
-                                <p>รายละเอียด ${item.details}</p>
-                            </div>
+                        <div class="card-body">
+                            ${item.com.map(comment => `<p> หัวคิดเห็น ${comment}</p>`).join('')}
                         </div>
+                    </div>
+                </div>
+                <form class="comment-form" data-post-id="${item.id_post}">
+                    <div class="row justify-content-center">
+                        <div class="col-10">
+                            <input type="text" class="form-control comment-input" placeholder="แสดงความคิดเห็น">
                         </div>
-                    ` 
+                        <div class="col">
+                            <button type="submit" class="btn btn-success">ส่ง</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+});
+
+
+                document.querySelectorAll('.comment-form').forEach(form => {
+                    form.addEventListener('submit', function(event) {
+                        const formData = {
+                            id_post: this.dataset.postId,
+                            comment: this.querySelector('.comment-input').value
+                        };
+
+                        fetch('http://localhost:5000/comment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(formData)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    });
                 });
             })
             .catch(error => {
@@ -118,6 +139,5 @@
             });
         });
     </script>
-    
 </body>
 </html>
